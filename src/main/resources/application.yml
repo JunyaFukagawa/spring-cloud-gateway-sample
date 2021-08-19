@@ -1,0 +1,49 @@
+server.port: 8090
+
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            token-uri: http://127.0.0.1:8888/auth/realms/master/protocol/openid-connect/token
+            authorization-uri: http://127.0.0.1:8888/auth/realms/master/protocol/openid-connect/auth
+            userinfo-uri: http://127.0.0.1:8888/auth/realms/master/protocol/openid-connect/userinfo
+            user-name-attribute: preferred_username
+        registration:
+          keycloak-with-test-scope:
+            provider: keycloak
+            client-id: spring-with-test-scope
+            client-secret: f7fab54d-b766-4fc3-b3a2-fbcaf826e816
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+          keycloak-without-test-scope:
+            provider: keycloak
+            client-id: spring-without-test-scope
+            client-secret: f6fc369d-49ce-4132-8282-5b5d413eba23
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+  application:
+    name: callme
+    security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: http://127.0.0.1:8888/auth/realms/master
+  cloud:
+    gateway:
+      default-filters: TokenRelay
+      routes:
+        - id: callme-service
+          uri: http://127.0.0.1:5000 #callmeサービスのURL
+          predicates:
+            - Path=/callme/**
+          filters:
+            - RemoveRequestHeader=Cookie #callmeサービスへ転送する時にCookieを削除
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    org.springframework.security: DEBUG
