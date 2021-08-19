@@ -1,0 +1,25 @@
+.gradle
+build/
+out/
+logs/
+temp/
+.kotlintest/
+.vs/
+_workDir/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+.idea/*
+!.idea/gradle.xml
+!.idea/misc.xml
+!.idea/codeStyles
+!.idea/externalDependencies.xml
+!.idea/saveactions_settings.xml
+!.idea/runConfigurations/AllTest.xml
